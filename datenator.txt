@@ -1,0 +1,16 @@
+This is for Ramp
+let
+    Source = Excel.CurrentWorkbook(){[Name="Date"]}[Content],
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"StartDate", type text}, {"EndDate", type text}}),
+    #"Added Custom" = Table.AddColumn(#"Changed Type", "Custom", each "(ShipmentOrder.ActualShipDate BETWEEN '"&[StartDate]&"' AND '"&[EndDate]&"')"),
+    Custom = "AND "&Text.Combine(#"Added Custom"[Custom])
+in
+    Custom
+This is for Davinci
+let
+    Source = Excel.CurrentWorkbook(){[Name="ACCOUNT"]}[Content],
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Account", type text}}),
+    #"Added Custom" = Table.AddColumn(#"Changed Type", "Custom", each "(dv_business_partner.accountid ='"&[Account]&"')"),
+    Custom ="AND "&Text.Combine( #"Added Custom"[Custom])
+in
+    Custom
