@@ -14,3 +14,12 @@ let
     Custom ="AND "&Text.Combine( #"Added Custom"[Custom])
 in
     Custom
+
+Naming
+let
+    Source = Excel.CurrentWorkbook(){[Name="Account"]}[Content],
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Account", type text}}),
+    #"Added Custom" = Table.AddColumn(#"Changed Type", "Custom", each "(Inventory.CustomerName = '"&[Account]&"' AND WarehouseReceipt.CustomerName = '"&[Account]&"' )"),
+    Custom = Text.Combine(#"Added Custom"[Custom])
+in
+    Custom
