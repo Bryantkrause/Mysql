@@ -45,7 +45,7 @@ ORDER BY WarehouseReceipt.DeliveryDate
     GROUP BY Inventory.CustomerName, Inventory.LotReferenceOne, Inventory.PalletID, Inventory.WarehouseSku, Inventory.Qty
     ORDER BY Inventory.LotReferenceOne
 
-SELECT
+'SELECT
 InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate, 
 SUM(InventoryAllView.QTYAVAILABLE+InventoryAllView.QTYALLOCATED+InventoryAllView.QTYEXPECTED+InventoryAllView.QTYONHOLD+InventoryAllView.QTYDAMAGED) Quantity
 FROM
@@ -56,9 +56,9 @@ WarehouseReceiptDetailEntry.FacilityName = WarehouseReceipt.FacilityName AND
 WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName
 WHERE InventoryAllView.CustomerName='403' AND InventoryAllView.FACILITYNAME !='ZTEST'
 GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate
-HAVING SUM(InventoryAllView.QTYAVAILABLE+InventoryAllView.QTYALLOCATED+InventoryAllView.QTYEXPECTED+InventoryAllView.QTYONHOLD+InventoryAllView.QTYDAMAGED) > 0
+HAVING SUM(InventoryAllView.QTYAVAILABLE+InventoryAllView.QTYALLOCATED+InventoryAllView.QTYEXPECTED+InventoryAllView.QTYONHOLD+InventoryAllView.QTYDAMAGED) > 0'
 
-SELECT
+'SELECT
 InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate, 
 InventoryAllView.QTYAVAILABLE, InventoryAllView.QTYALLOCATED, InventoryAllView.QTYEXPECTED, InventoryAllView.QTYONHOLD, InventoryAllView.QTYDAMAGED
 FROM
@@ -69,8 +69,9 @@ WarehouseReceiptDetailEntry.FacilityName = WarehouseReceipt.FacilityName AND
 WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName
 WHERE InventoryAllView.CustomerName='403' AND InventoryAllView.FACILITYNAME !='ZTEST'
 GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate, 
-InventoryAllView.QTYAVAILABLE, InventoryAllView.QTYALLOCATED, InventoryAllView.QTYEXPECTED, InventoryAllView.QTYONHOLD, InventoryAllView.QTYDAMAGED
+InventoryAllView.QTYAVAILABLE, InventoryAllView.QTYALLOCATED, InventoryAllView.QTYEXPECTED, InventoryAllView.QTYONHOLD, InventoryAllView.QTYDAMAGED'
 
+'dont need having'
 SELECT
 InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate, 
 SUM(InventoryAllView.QTYAVAILABLE+InventoryAllView.QTYALLOCATED+InventoryAllView.QTYEXPECTED+InventoryAllView.QTYONHOLD+InventoryAllView.QTYDAMAGED) Quantity
@@ -83,4 +84,50 @@ WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName
 WHERE InventoryAllView.CustomerName='403' AND InventoryAllView.FACILITYNAME !='ZTEST'
 GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.PalletId, WarehouseReceipt.DeliveryDate
 
+'before adding that adjustment table'
+= Odbc.Query("dsn=RAMP1", "SELECT
+InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId, InventoryAllView.LOTREFERENCEONE,  WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND 
+FROM InventoryAllView LEFT JOIN WarehouseReceiptDetailEntry ON InventoryAllView.PalletId = WarehouseReceiptDetailEntry.PalletId LEFT JOIN
+WarehouseReceipt ON WarehouseReceiptDetailEntry.ReceiptNumber = WarehouseReceipt.ReceiptNumber AND
+WarehouseReceiptDetailEntry.CustomerName = WarehouseReceipt.CustomerName AND
+WarehouseReceiptDetailEntry.FacilityName = WarehouseReceipt.FacilityName AND
+WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName 
+WHERE InventoryAllView.FACILITYNAME !='ZTEST' "&Account&"
+GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId,InventoryAllView.LOTREFERENCEONE,   WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND ORDER BY WarehouseReceipt.DeliveryDate")
 
+'adding adjustment table'
+= Odbc.Query("dsn=RAMP1", "SELECT
+InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId, InventoryAllView.LOTREFERENCEONE, WarehouseAdjustmentDetail.CreateDate, WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND 
+FROM 
+InventoryAllView LEFT JOIN WarehouseReceiptDetailEntry ON InventoryAllView.PalletId = WarehouseReceiptDetailEntry.PalletId LEFT JOIN
+WarehouseReceipt ON WarehouseReceiptDetailEntry.ReceiptNumber = WarehouseReceipt.ReceiptNumber AND
+WarehouseReceiptDetailEntry.CustomerName = WarehouseReceipt.CustomerName AND
+WarehouseReceiptDetailEntry.FacilityName = WarehouseReceipt.FacilityName AND
+WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName LEFT JOIN
+WarehouseAdjustmentDetail ON InventoryAllView.PalletId = WarehouseAdjustmentDetail.PalletId
+WHERE InventoryAllView.FACILITYNAME !='ZTEST' "&Account&"
+GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId,InventoryAllView.LOTREFERENCEONE, WarehouseAdjustmentDetail.CreateDate,   WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND ORDER BY WarehouseReceipt.DeliveryDate")
+
+= Table.AddColumn(#"Changed Type", "Custom", each if [CreateDate] = null then [LOTREFERENCEONE] else if [LOTREFERENCEONE] = null then [DeliveryDate] else if [DeliveryDate]
+ = null then [CreateDate] else [CreateDate])
+
+ 'just for unicargo'
+= Odbc.Query("dsn=RAMP1", "SELECT
+InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId, InventoryAllView.LOTREFERENCEONE, WarehouseAdjustmentDetail.CreateDate, WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND 
+FROM 
+InventoryAllView LEFT JOIN WarehouseReceiptDetailEntry ON InventoryAllView.PalletId = WarehouseReceiptDetailEntry.PalletId LEFT JOIN
+WarehouseReceipt ON WarehouseReceiptDetailEntry.ReceiptNumber = WarehouseReceipt.ReceiptNumber
+LEFT JOIN Customer ON InventoryAllView.CustomerName = Customer.CustomerName AND
+WarehouseReceiptDetailEntry.CustomerName = WarehouseReceipt.CustomerName AND
+WarehouseReceiptDetailEntry.FacilityName = WarehouseReceipt.FacilityName AND
+WarehouseReceiptDetailEntry.WarehouseName = WarehouseReceipt.WarehouseName LEFT JOIN
+WarehouseAdjustmentDetail ON InventoryAllView.PalletId = WarehouseAdjustmentDetail.PalletId
+WHERE InventoryAllView.FACILITYNAME !='ZTEST' AND
+Customer.BillingGroup = 'UNC'
+GROUP BY InventoryAllView.CustomerName, InventoryAllView.WarehouseSku, InventoryAllView.Description, InventoryAllView.PalletId,InventoryAllView.LOTREFERENCEONE, WarehouseAdjustmentDetail.CreateDate,   WarehouseReceipt.DeliveryDate, 
+InventoryAllView.QTYONHAND ORDER BY WarehouseReceipt.DeliveryDate")
