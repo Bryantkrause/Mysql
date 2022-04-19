@@ -7,3 +7,5 @@ INNER JOIN PackDetail ON Sku.DefaultPack=PackDetail.PackName
 WHERE SO.CustomerName='400' AND SO.ActualShipDate BETWEEN '11/01/2021 00:00:01' AND '11/30/2021 23:59:59'
 AND (SO.User2='true' OR SO.User2='TRUE')
 AND PackDetail.UOM='IN'
+
+47895
