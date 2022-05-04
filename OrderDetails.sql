@@ -17,3 +17,10 @@ WHERE
 ShipmentOrder.CustomerName = "&Customer&"
 GROUP BY ShipmentOrder.CustomerName, ShipmentOrder.OrderNumber, ShipmentOrderPick.PickUOM
 
+SELECT 
+ShipmentOrderPick.OrderNumber, ShipmentOrderPick.PickUOM, ShipmentOrderPick.PickQty, PackDetail.Count
+FROM ShipmentOrder INNER JOIN  ShipmentOrderPick ON ShipmentOrder.OrderNumber=ShipmentOrderPick.OrderNumber 
+INNER JOIN Sku ON ShipmentOrderPick.WarehouseSku=Sku.WarehouseSku
+INNER JOIN PackDetail ON Sku.DefaultPack=PackDetail.PackName
+WHERE ShipmentOrder.CustomerName = "&Customer&"  AND "&Date&" 
+GROUP BY ShipmentOrderPick.OrderNumber, ShipmentOrderPick.PickUOM, ShipmentOrderPick.PickQty, PackDetail.Count ORDER BY OrderNumber
