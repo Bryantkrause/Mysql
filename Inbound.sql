@@ -5,6 +5,11 @@ FROM WarehouseReceipt
 WHERE WarehouseReceipt.CustomerName='400'
 "&InboundDate&"
 
+SELECT
+CustomerName, ReceiptNumber, CustomerOrderNumber,DeliveryDate, CreateDate,
+EstimatedDeliveryDate, TransportMethod, QtyReceived, LadingQuantity, PalletsReceived, DeliveryDate
+FROM WarehouseReceipt 
+WHERE FacilityName!='Ztest' "&InboundDate&"
 
 "M"
 SELECT
