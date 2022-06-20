@@ -1,5 +1,5 @@
 SELECT CustomerName, CustomerAlias
 
-FROM Customers
+FROM Customer
 
 WHERE Status=0
