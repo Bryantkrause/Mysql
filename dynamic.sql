@@ -1,7 +1,7 @@
 DECLARE @SQL nvarchar(1000)
 
 DECLARE @Pid varchar(50)
-set @Pid = '400' 
+set @Pid = "&Customer&" 
 
 
 SET @SQL = '
@@ -12,7 +12,3 @@ WHERE FacilityName=''Cerritos'' AND CustomerName=
 '+ @Pid
 
 EXEC (@SQL)
-
-
-
-
