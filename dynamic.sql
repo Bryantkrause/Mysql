@@ -1,7 +1,6 @@
 DECLARE @SQL nvarchar(1000)
 
 DECLARE @Pid varchar(50)
-DECLARE @Pid2 varchar(50)
 set @Pid = '400' 
 
 
