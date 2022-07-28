@@ -36,3 +36,14 @@ WHERE dv_business_partner.id = dv_item.vendor_id AND dv_item.id = dv_inventory.i
   (((dv_inventory.qty_available+dv_inventory.qty_allocated+dv_inventory.qty_shipped+dv_inventory.qty_hold+dv_inventory.qty_damaged+dv_inventory.qty_quarantine))>0))
 GROUP BY dv_item.id, dv_item.item_code, dv_item.description, dv_uom.default_ouom
 HAVING (dv_uom.default_ouom<>1) OR (dv_uom.default_ouom<>1)
+
+SELECT
+dv_business_partner.accountid, dv_inventory.containerid, dv_storage.storageid, 
+dv_item.item_code, dv_item.description, dv_inventory.recv_ts, SUM(dv_inventory.qty_available+ dv_inventory.qty_damaged+ dv_inventory.qty_hold+dv_inventory.qty_allocated ) Quantity
+FROM 
+dv_inventory INNER JOIN dv_item ON dv_inventory.item_id=dv_item.id INNER JOIN dv_business_partner ON dv_item.vendor_id=dv_business_partner.id
+INNER JOIN dv_storage ON dv_inventory.storage_id=dv_storage.id INNER JOIN dv_uom ON dv_item.id = dv_uom.item_id
+WHERE
+dv_business_partner.enabled=1 "&ACCOUNT&" AND dv_inventory.qty_shipped='0' GROUP BY dv_business_partner.accountid, dv_inventory.recv_ts , dv_inventory.containerid,
+dv_item.item_code, dv_item.description, dv_storage.storageid
+HAVING SUM(dv_inventory.qty_available+ dv_inventory.qty_damaged+ dv_inventory.qty_hold+dv_inventory.qty_allocated ) > 0 ORDER BY dv_inventory.recv_ts
