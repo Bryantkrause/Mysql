@@ -21,3 +21,8 @@ WHERE WarehouseReceipt.CustomerName='400'
 AND WarehouseReceipt.TransportMethod!= 'U'
 AND (WarehouseReceipt.TransportMethod = '40 FLR' OR WarehouseReceipt.TransportMethod = '45 FLR')
 AND CustomerAccessorial.AccessorialName = 'UNLD 40 FT FLR CNT'
+
+SELECT CustomerName, DeliveryDate, SUM(PalletsReceived)
+FROM WarehouseReceipt
+WHERE DeliveryDate  BETWEEN '01/01/2021 00:00:01' AND '02/28/2022 23:59:59'
+GROUP BY CustomerName, DeliveryDate
