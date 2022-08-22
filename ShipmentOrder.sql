@@ -1,8 +1,15 @@
-SELECT CustomerName, OrderNumber, ActualShipDate, TransportMethod, PalletsShipped, CartonQuantity, QtyShipped
+SELECT
+CASE WHEN CustomerName >= 430 THEN 430 ELSE CustomerName END As ID, 
+Year = DATEPART(YEAR, ActualShipDate),
+Month = DATEPART(Month, ActualShipDate),
+Count(DISTINCT(OrderNumber)) As Orders, SUM(QtyShipped) as Qty
 
 FROM ShipmentOrder
 
-WHERE CustomerName = "&Customer&" AND "&Date&" AND FacilityName!='Ztest'
+WHERE ActualShipDate  BETWEEN '4/01/2021 00:00:01' AND '07/31/2022 23:59:59' AND
+CustomerName != 'PC' AND CustomerName !='Z_TEST' AND FacilityName !='Z_TEST'
+GROUP BY CustomerName, DATEPART(YEAR, ActualShipDate), DATEPART(Month, ActualShipDate)
+
 
 'to find a sous'
 
