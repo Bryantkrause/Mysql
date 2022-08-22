@@ -25,3 +25,14 @@ GROUP BY DocumentInvoice.CustomerName, DocumentInvoice.FacilityName, DocumentInv
 WarehouseReceipt.DeliveryDate, WarehouseReceipt.CustomerOrderNumber,WarehouseReceipt.CustomerPONumber,  WarehouseReceipt.CarrierName, WarehouseReceipt.TransportMethod, WarehouseReceipt.QtyReceived, WarehouseReceipt.LadingQuantity, WarehouseReceipt.PalletsReceived
 
 ORDER BY DocumentInvoice.ReceiptNumber 
+
+SELECT CASE WHEN CustomerName >= 430 THEN 430 ELSE CustomerName END As name,
+Year = DATEPART(YEAR, DeliveryDate),
+Month = DATEPART(Month, DeliveryDate),
+SUM(QtyReceived) As Units, Count(DISTINCT(ReceiptNumber)) AS Orders
+FROM WarehouseReceipt
+WHERE DeliveryDate BETWEEN '4/01/2021 00:00:01' AND '07/31/2022 23:59:59'
+AND CustomerName != 'PC' AND CustomerName !='Z_TEST' AND FacilityName !='Z_TEST'
+GROUP BY CustomerName, DATEPART(YEAR, DeliveryDate),DATEPART(Month, DeliveryDate)
+ORDER BY CustomerName, DATEPART(YEAR, DeliveryDate),DATEPART(Month, DeliveryDate)
+

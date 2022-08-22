@@ -19,3 +19,16 @@ WarehouseBolNumber, RoutingReferenceNumber
 FROM ShipmentOrder
 
 WHERE CustomerName = '400'  AND FacilityName!='Ztest' AND CarrierName = 'PRIORITY1'
+
+
+-- Davinci
+SELECT dv_business_partner.description,EXTRACT(MONTH FROM dv_order.actual_trans_ts) as month, EXTRACT(YEAR FROM dv_order.actual_trans_ts) as YEAR,
+ sum(dv_order_ship_item_entry.qty) as Units, count(DISTINCT(dv_order.id)), count(dv_order_ship_item_entry.ordinal) as SKu
+FROM dv_order INNER JOIN dv_business_partner
+ON dv_order.vendor_id = dv_business_partner.id
+INNER JOIN dv_order_ship_item_entry ON dv_order.id = dv_order_ship_item_entry.order_id
+
+WHERE dv_order.actual_trans_ts BETWEEN '2021-05-01 00:00:00' AND '2022-07-31 23:59:59'
+
+GROUP BY dv_business_partner.description , month, YEAR
+ORDER BY dv_business_partner.description, month, YEAR
