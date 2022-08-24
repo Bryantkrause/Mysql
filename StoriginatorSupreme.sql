@@ -23,6 +23,14 @@ CASE WHEN CustomerName >= 430 THEN 430 ELSE CustomerName END As ID,
 FORMAT(EffectiveDate, 'yyyyMM') AS YM,
 TransactionType, Sum(QTY) As QTY
 FROM InventoryTransaction
-WHERE CustomerName = '425' AND FacilityName = 'Fullerton' 
+WHERE CustomerName = '425' AND FacilityName = 'Fullerton' AND TransactionType = 1
 GROUP BY CustomerName ,  TransactionType, FORMAT(EffectiveDate, 'yyyyMM')
 ORDER BY FORMAT(EffectiveDate, 'yyyyMM')
+
+
+
+
+
+
+
+
