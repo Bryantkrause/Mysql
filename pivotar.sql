@@ -7,7 +7,6 @@ WHERE DeliveryDate BETWEEN '1/01/2021 00:00:01' AND '05/31/2022 23:59:59'
 PIVOT (
     SUM (PalletsReceived)
 FOR month IN ([1] , [2] , [3] , [4] , [5] , [6] , [7] , [8] ,[9] , [10] , [11] , [12])) AS thingy
-
 ORDER BY year desc
 -- above this is working model
 
