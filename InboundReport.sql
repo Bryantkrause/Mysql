@@ -1,11 +1,10 @@
 SELECT
-WarehouseReceipt.CustomerName, WarehouseReceipt.ReceiptNumber, WarehouseReceipt.DeliveryDate, WarehouseReceipt.CarrierName,
-WarehouseReceipt.TransportMethod, WarehouseReceipt.QtyReceived, WarehouseReceipt.PalletsReceived
+WarehouseReceipt.CustomerName, WarehouseReceipt.ReceiptNumber, WarehouseReceipt.DeliveryDate, WarehouseReceipt.FacilityName
+WarehouseReceipt.TransportMethod, WarehouseReceipt.QtyReceived, WarehouseReceipt.LadingQuantity, WarehouseReceipt.PalletsReceived
 
 FROM WarehouseReceipt 
-WHERE WarehouseReceipt.CustomerName ='314 ' AND
-WarehouseReceipt.DeliveryDate BETWEEN '03/01/2022 00:00:01' AND '03/31/2022 23:59:59'
-AND WarehouseReceipt.FacilityName!='Ztest' 
+WHERE WarehouseReceipt.DeliveryDate BETWEEN '01/01/2022 00:00:01' AND '07/31/2022 23:59:59'
+AND WarehouseReceipt.CustomerName != 'PC' AND WarehouseReceipt.CustomerName !='Z_TEST' AND WarehouseReceipt.FacilityName !='Z_TEST'
 
 
 'Specific List of Orders For lumper'
@@ -35,4 +34,12 @@ WHERE DeliveryDate BETWEEN '4/01/2021 00:00:01' AND '07/31/2022 23:59:59'
 AND CustomerName != 'PC' AND CustomerName !='Z_TEST' AND FacilityName !='Z_TEST'
 GROUP BY CustomerName, DATEPART(YEAR, DeliveryDate),DATEPART(Month, DeliveryDate)
 ORDER BY CustomerName, DATEPART(YEAR, DeliveryDate),DATEPART(Month, DeliveryDate)
+
+SELECT Concat(WarehouseReceipt.CustomerName,WarehouseReceipt.FacilityName) AS THingy,CustomerTariff.TariffName,
+(WarehouseReceipt.LadingQuantity*CustomerTariff.Rate) As UnloadPallets
+FROM WarehouseReceipt LEFT JOIN CustomerTariff ON WarehouseReceipt.CustomerName = CustomerTariff.CustomerName AND
+WarehouseReceipt.FacilityName = CustomerTariff.FacilityName 
+WHERE WarehouseReceipt.CustomerName != 'PC' AND WarehouseReceipt.CustomerName !='Z_TEST' AND WarehouseReceipt.FacilityName !='Z_TEST' AND CustomerTariff.TariffName='LZ 1001-2000' AND
+WarehouseReceipt.DeliveryDate BETWEEN '1/1/2022 12:00:00 AM' AND '1/7/2022 11:59:59 PM' AND WarehouseReceipt.TransportMethod != 'Palletized'
+AND WarehouseReceipt.LadingQuantity > 1000 AND WarehouseReceipt.LadingQuantity < 2001
 
