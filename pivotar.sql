@@ -43,3 +43,15 @@ FROM WarehouseReceipt
 WHERE DeliveryDate BETWEEN '1/01/2021 00:00:01' AND '07/31/2022 23:59:59' AND
 CustomerName != 'PC' AND CustomerName !='Z_TEST'
 GROUP BY CustomerName
+
+
+SELECT * FROM
+(
+SELECT CustomerName, year(ActualShipDate) as year, IsNull(month(ActualShipDate), 0) as month ,PalletShipped
+FROM ShipmentOrder
+WHERE DeliveryDate BETWEEN '1/01/2021 00:00:01' AND '09/30/2022 23:59:59'
+)  test
+PIVOT (
+    SUM (PalletShipped)
+FOR month IN ([1] , [2] , [3] , [4] , [5] , [6] , [7] , [8] ,[9] , [10] , [11] , [12])) AS thingy
+ORDER BY year desc

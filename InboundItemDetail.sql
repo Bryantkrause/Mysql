@@ -1,4 +1,4 @@
-SELECT Receipt.FacilityName, Receipt.CustomerName, Receipt.receiptNumber, Receipt.TransportMethod, Receipt.DeliveryDate,
+SELECT Receipt.FacilityName, Receipt.CustomerName, Receipt.receiptNumber, Receipt.DeliveryDate,
 Entry.warehouseSKu, Entry.PackName, Entry.UOM, Entry.QtyReceived, Entry.PalletID
 From warehouseReceipt AS Receipt LEFT JOIN warehouseReceiptDetailEntry AS Entry ON Receipt.receiptNumber = Entry.receiptNumber AND
 Receipt.FacilityName = Entry.FacilityName AND Receipt.CustomerName = Entry.CustomerName 

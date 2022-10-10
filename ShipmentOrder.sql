@@ -11,6 +11,20 @@ CustomerName != 'PC' AND CustomerName !='Z_TEST' AND FacilityName !='Z_TEST'
 GROUP BY CustomerName, DATEPART(YEAR, ActualShipDate), DATEPART(Month, ActualShipDate)
 
 
+-- Grab a note
+
+SELECT SO.OrderNumber, SO.ActualShipDate, 
+FROM ShipmentOrder AS SO LEFT JOIN 
+WHERE
+
+
+
+
+
+
+
+
+
 'to find a sous'
 
 SELECT CustomerName, ActualShipDate, OrderNumber, CustomerOrderNumber, CustomerPoNumber, CarrierProNumber,
