@@ -1,3 +1,13 @@
+SELECT CASE WHEN Invoice.CustomerName >= 430 THEN 430 ELSE Invoice.CustomerName END As ID,
+month(Invoice.InvoiceDate) AS month,year(Invoice.InvoiceDate) AS Year,
+SUM(InvoiceDetail.InvoicedQty) QTY
+FROM Invoice INNER JOIN InvoiceDetail ON (Invoice.WarehouseName = InvoiceDetail.WarehouseName)
+AND (Invoice.FacilityName = InvoiceDetail.FacilityName) AND
+(Invoice.InvoiceNumber = InvoiceDetail.InvoiceNumber)
+WHERE Invoice.InvoiceDate Between '01/01/2021 00:00:01' AND '04/30/2022 23:59:59' 
+AND InvoiceDetail.TariffName='REC STOR MONTHLY PL'
+GROUP BY  Invoice.CustomerName,Invoice.InvoiceDate
+
 'this version has duplicates not sure why'
 SELECT 
     Inventory.CustomerName,

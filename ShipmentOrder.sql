@@ -13,11 +13,10 @@ GROUP BY CustomerName, DATEPART(YEAR, ActualShipDate), DATEPART(Month, ActualShi
 
 -- Grab a note
 
-SELECT SO.OrderNumber, SO.ActualShipDate, 
-FROM ShipmentOrder AS SO LEFT JOIN 
-WHERE
-
-
+SELECT SO.OrderNumber, SO.ActualShipDate, Note.Note
+FROM ShipmentOrder AS SO INNER JOIN ShipmentOrderNote AS Note On SO.OrderNumber = Note.OrderNumber
+WHERE SO.CustomerName = '314' AND SO.ActualShipDate BETWEEN '9/01/2022 00:00:01' AND '09/30/2022 23:59:59' AND
+Note.Note LIKE '%110 CASES PER PALLET%'
 
 
 
