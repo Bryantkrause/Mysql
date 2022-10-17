@@ -19,7 +19,9 @@ WHERE SO.CustomerName = '314' AND SO.ActualShipDate BETWEEN '9/01/2022 00:00:01'
 Note.Note LIKE '%110 CASES PER PALLET%'
 
 
-
+SELECT name
+FROM Customer
+WHERE referee_id != 2; or referee_id  IS NULL
 
 
 
