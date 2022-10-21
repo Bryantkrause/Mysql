@@ -6,3 +6,5 @@
 -- License_Number
 -- Driver_Start_Date
 -- State of Residence
+
+--  use Lucid.app for questions and schema creation
