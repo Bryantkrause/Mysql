@@ -26,5 +26,5 @@ WR.EDISent
 FROM WarehouseReceipt AS WR LEFT JOin WarehouseReceiptDetail ON WR.ReceiptNumber = WarehouseReceiptDetail.ReceiptNumber
 WHERE WR.CreateDate BETWEEN '1/01/2022 00:00:01' AND '10/15/2022 23:59:59'
 AND WR.CustomerName != 'PC' AND WR.CustomerName !='Z_TEST' AND WR.FacilityName !='ZTEST'
-GROUP BY WR.CustomerName, DATEPART(Day, WR.CreateDate), DATEPART(YEAR, WR.CreateDate),DATEPART(Month, WR.CreateDate), WR.FacilityName, WR.EDISent
+GROUP BY WR.CustomerName, DATEPART(Day, WR.CreateDate), DATEPART(YEAR, WR.CreateDate),DATEPART(Month, WR.CreateDate), WR.FacilityName, WR.EDISent, WR.CreateWho
 ORDER BY WR.CustomerName, DATEPART(YEAR, WR.CreateDate),DATEPART(Month, WR.CreateDate)
