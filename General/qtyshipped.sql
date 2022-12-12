@@ -28,22 +28,25 @@ FOR month IN ([1] , [2] , [3] , [4] , [5] , [6] , [7] , [8] ,[9] , [10] , [11] ,
 ORDER BY  ID, year asc
 
 -- with total
-WITH 
+WITH OrderNumber (UnitShipped,[year], [Orderyear], [month]) AS
 (
 SELECT CASE WHEN so.CustomerName >= 430 THEN 430 ELSE so.CustomerName END As ID,
 CASE WHEN so.CartonQuantity < so.QtyShipped THEN so.CartonQuantity ELSE so.QtyShipped END AS UnitShipped,
-IsNull(month(so.ActualShipDate), 0) as month,
-IsNull(year(so.ActualShipDate), 0) as year
+LEFT (datename(Month,so.ActualShipDate), 3) as [month],
+Year(so.ActualShipDate) as [year],
+Year(so.ActualShipDate) as [Orderyear]
 FROM ShipmentOrder AS so LEFT JOIN Customer AS C ON so.CustomerName = c.CustomerName
 WHERE so.ActualShipDate  BETWEEN '1/01/2021 00:00:01' AND '11/30/2022 23:59:59' AND
 so.CustomerName != 'PC' AND so.CustomerName !='Z_TEST' AND so.FacilityName !='ZTEST' AND
 c.status = 0
 )
-
-
+select *,
+    (select count([Year] from OrderNumber X
+    where X.Orderyear = PVT.Orderyear) as [Total]
+from OrderNumber
 PIVOT (
-    SUM(UnitShipped)
-FOR month IN ([1] , [2] , [3] , [4] , [5] , [6] , [7] , [8] ,[9] , [10] , [11] , [12])) AS thingy
+    Count(Orderyear)
+FOR month IN (Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)) AS thingy
 ORDER BY  ID, year asc
 
 
