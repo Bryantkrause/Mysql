@@ -24,6 +24,7 @@ SELECT CustomerName,
 FROM InventoryTransaction
 WHERE FacilityName!='ZTest'  AND PalletId = '400-57147'
 GROUP BY CustomerName, WarehouseSku, PalletId
+
 'stolen from https://stackoverflow.com/questions/18213387/sum-columns-depending-on-another-column-value'
 SELECT s.name
      , s.current_points
@@ -49,3 +50,10 @@ SELECT CustomerName, WarehouseSku,  PalletId, SUM(Qty) AS Quantity
 FROM InventoryTransaction
 WHERE FacilityName!='ZTest' AND TransactionType != 4 AND PalletId = '400-57147'
 GROUP BY CustomerName, WarehouseSku,  PalletId
+
+
+SELECT * 
+
+FROM InventoryTransaction
+
+WHERE FacilityName!='ZTest' and CustomerName = '120'
