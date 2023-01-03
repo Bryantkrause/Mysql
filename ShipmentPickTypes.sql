@@ -33,9 +33,9 @@ with CTE as
         CASE WHEN so.CustomerName >= 430 THEN 430 ELSE so.CustomerName END As ID,
         p.PickUOM,IsNull(p.PickQty,0) AS PickQty
         FROM ShipmentOrder as so LEFT JOIN ShipmentOrderPick as p On so.OrderNumber = p.OrderNumber AND 
-        so.CustomerName = p.CustomerName AND so.FacilityName = p.FacilityName AND
-        so.CustomerName != 'PC' AND so.CustomerName !='Z_TEST'
-        WHERE so.ActualShipDate BETWEEN '10/01/2022 00:00:01' AND '10/31/2022 23:59:59') thingy
+        so.CustomerName = p.CustomerName AND so.FacilityName = p.FacilityName 
+        WHERE so.ActualShipDate BETWEEN '10/01/2022 00:00:01' AND '10/31/2022 23:59:59' AND
+        so.CustomerName != 'PC' AND so.CustomerName !='Z_TEST') thingy
     PIVOT (
         SUM(thingy.PickQty) FOR PickUOM IN ([PL], [CS], [EA], [IN])) AS turn
         )
